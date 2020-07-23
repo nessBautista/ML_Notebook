@@ -4,7 +4,7 @@ import logging
 import matplotlib.pyplot as plt
 
 logger = tf.get_logger()
-logger.setLevel(logging.ERROR)
+logger.setLevel(logging.ERROR) #Looks like this sets the logs to display errors only
 
 #Setup training data
 celsius_q    = np.array([-40, -10,  0,  8, 15, 22,  38],  dtype=float)
