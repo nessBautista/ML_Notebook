@@ -10,6 +10,10 @@ from sklearn.feature_extraction import DictVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import KFold   
+from sklearn.metrics import roc_curve
+from sklearn.metrics import auc
+from sklearn.metrics import roc_auc_score
 
 class BinaryEvaluationMetrics:
     """ Evaluation Metrics for binary Classification
@@ -179,4 +183,39 @@ class BinaryEvaluationMetrics:
         return df
 
 
-        return pd.DataFrame()
+    def train_logistic_regression(self, df, columns, y, C):
+        cat = df[columns].to_dict(orient='records')
+        dv = DictVectorizer(sparse=False)
+        dv.fit(cat)
+        X = dv.transform(cat)
+
+        model = LogisticRegression(solver='liblinear', C=C) 
+        model.fit(X, y)
+        return dv, model
+
+    def predict_logistic_regression(self, df, columns, dv, model):
+        cat = df[columns].to_dict(orient='records')
+        X = dv.transform(cat)
+
+        y_pred = model.predict_proba(X)[:, 1]
+        return y_pred
+
+    def kfold_train_logistic_regression(self, nfolds, df, columns):    
+        kfold = KFold(n_splits=nfolds, shuffle=True, random_state=1)
+ 
+        for C in [0.001, 0.01, 0.1, 0.5, 1, 10]:
+            aucs = []
+            for train_idx, val_idx in kfold.split(df):
+                X_train = df.iloc[train_idx]
+                X_val  = df.iloc[val_idx]
+
+                y_train = X_train.churn.values
+                y_val = X_val.churn.values
+
+                dv, model = self.train_logistic_regression(X_train,columns,y_train, C)
+                y_pred = self.predict_logistic_regression(X_val, columns, dv, model)
+                auc = roc_auc_score(y_val, y_pred)
+                aucs.append(auc)
+            
+            print('C=%s, auc = %0.3f ± %0.3f' % (C, np.mean(aucs), np.std(aucs)))
+        

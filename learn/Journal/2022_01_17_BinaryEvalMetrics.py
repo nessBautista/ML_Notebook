@@ -154,14 +154,34 @@ df_ideal_scores = helper.get_ideal_scores(y_val)
 #plt.plot(df_ideal_scores.fpr, df_ideal_scores.tpr, label="Ideal")
 #plt.legend()
 
+# ROC comparison
 from sklearn.metrics import roc_curve
-
+from sklearn.metrics import auc
+# Compare ROC of the Logistic Regression, small Logistic Regression and Decision tree
 lr_model_preds = helper.get_model_raw_predictions_for("LogisticRegression", X_val) 
-fpr, tpr, thresholds = roc_curve(y_val, lr_model_preds)
-plt.plot(fpr, tpr)
-plt.plot([0, 1], [0, 1])
+lr_small_model_preds = helper.get_model_raw_predictions_for("SmallLogisticRegression", X_val_small) 
+tree_model_preds = helper.get_model_raw_predictions_for("DecisionTree", X_val) 
+
+fpr_lr, tpr_lr, thresholds_lr = roc_curve(y_val, lr_model_preds)
+fpr_small, tpr_small, thresholds_small = roc_curve(y_val, lr_small_model_preds)
+fpr_tree, tpr_tree, thresholds_tree = roc_curve(y_val, tree_model_preds)
+
+plt.plot(fpr_lr, tpr_lr, c='b')
+plt.plot(fpr_small, tpr_small, c='g')
+plt.plot(fpr_tree, tpr_tree, c='orange')
+
+# You can also get the AUC
+print(f'Logistic Regression AUC:{auc(fpr_lr, tpr_lr)}')
+print(f'Small Logistic Regression AUC:{auc(fpr_small, tpr_small)}')
+print(f'Decision Tree AUC:{auc(fpr_tree, tpr_tree)}')
 
 
-
+# COmparing AUC with Probabilities
+neg = lr_model_preds[y_val==0]
+pos = lr_model_preds[y_val==1]
+np.random.seed(1)
+neg_choice = np.random.randint(low=0, high=len(neg), size=10000)
+pos_choice = np.random.randint(low=0, high=len(pos), size=10000)
+(pos[pos_choice] > neg[neg_choice]).mean()
 
 
