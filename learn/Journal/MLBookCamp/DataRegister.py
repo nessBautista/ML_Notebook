@@ -24,7 +24,10 @@ class DataRegister:
         # The register associating short keys to a CSV file
         self.csv_register = {
             "telco_customers":"kaggle/WA_Fn-UseC_-Telco-Customer-Churn.csv",
-            "diabetes":"kaggle/pima-indians-diabetes.data.csv"}
+            "diabetes":"kaggle/pima-indians-diabetes.data.csv",
+            "linear01":"Udacity/linear01.csv"
+            }
+
     
         # Register of processing functions
         self.processing_functions_register={}
@@ -35,6 +38,11 @@ class DataRegister:
         for key in self.csv_register.keys():
             keys.append(key)
         return keys
+    
+    # Get path for key
+    def get_path_from_key(self, key):
+        filepath = self.datasets_path + "/" + self.csv_register[key]
+        return filepath
     
     # Build a dataframe from a key
     def get_df_from_key(self, key):
