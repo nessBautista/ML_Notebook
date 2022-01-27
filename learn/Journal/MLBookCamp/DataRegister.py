@@ -25,7 +25,10 @@ class DataRegister:
         self.csv_register = {
             "telco_customers":"kaggle/WA_Fn-UseC_-Telco-Customer-Churn.csv",
             "diabetes":"kaggle/pima-indians-diabetes.data.csv",
-            "linear01":"Udacity/linear01.csv"
+            "linear01":"Udacity/linear01.csv",
+            "udacity_diabetes":"Udacity/diabetes.csv",
+            "udacity_lasso":"Udacity/lasso.csv",
+            "boston01":"kaggle/boston_housing.csv"
             }
 
     
