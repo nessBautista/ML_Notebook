@@ -28,7 +28,8 @@ class DataRegister:
             "linear01":"Udacity/linear01.csv",
             "udacity_diabetes":"Udacity/diabetes.csv",
             "udacity_lasso":"Udacity/lasso.csv",
-            "boston01":"kaggle/boston_housing.csv"
+            "boston01":"kaggle/boston_housing.csv",
+            "inegi_ver":"INEGI_veracruz_2020/conjunto_de_datos/conjunto_de_datos_iter_30CSV20.csv",
             }
 
     

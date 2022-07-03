@@ -1,5 +1,6 @@
 .vscode/
 datasets
+archive
 .DS_Store
 venv
 .idea
